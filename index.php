@@ -1,18 +1,21 @@
 <?php
-session_start(); // Toujours au début
+session_start(); // Démarrage de la session en début de script
 
 // Récupération des paramètres depuis l'URL avec des valeurs par défaut
 $controller = $_GET['controller'] ?? 'auth';   // Par défaut : auth
-$action = $_GET['action'] ?? 'register';       // Par défaut : register
+$action = $_GET['action'] ?? 'login';          // Par défaut : login
 
 // Inclure le middleware pour vérifier les rôles
-require_once 'middlewares/AuthMiddleware.php';  // Inclus une seule fois
+require_once 'middlewares/AuthMiddleware.php';
+
+// Inclure la connexion à la base de données
+require_once 'config/database.php';
 
 // Gestion des routes en fonction du contrôleur
 switch ($controller) {
     case 'auth':
         require_once 'controllers/authController.php';
-        $auth = new authController();
+        $auth = new AuthController();
         if (method_exists($auth, $action)) {
             $auth->$action();
         } else {
@@ -22,7 +25,7 @@ switch ($controller) {
 
     case 'admin':
         // Middleware pour vérifier que l'utilisateur est un administrateur
-        requireRole('admin');  // Assurer que l'utilisateur est administrateur
+        requireRole('admin');
 
         require_once 'controllers/AdminController.php';
         $admin = new AdminController();
@@ -35,19 +38,21 @@ switch ($controller) {
 
     case 'etudiant':
         // Middleware pour vérifier que l'utilisateur est un étudiant
-        requireRole('etudiant');  // Assurer que l'utilisateur est un étudiant
+        requireRole('etudiant');
 
         require_once 'controllers/EtudiantController.php';
         $etudiant = new EtudiantController();
 
         // Gestion des actions POST envoyées par l'étudiant
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (method_exists($etudiant, $action)) {
-                $etudiant->$action();
-            } elseif (isset($_POST['updateProfile']) && method_exists($etudiant, 'updateProfile')) {
+            if (isset($_POST['updateProfile']) && method_exists($etudiant, 'updateProfile')) {
                 $etudiant->updateProfile();
             } elseif (isset($_POST['relancer']) && method_exists($etudiant, 'relancer')) {
                 $etudiant->relancer();
+            } elseif (isset($_POST['submitForm']) && method_exists($etudiant, 'submitForm')) {
+                $etudiant->submitForm();
+            } elseif (method_exists($etudiant, $action)) {
+                $etudiant->$action();
             } else {
                 echo "Action POST inconnue dans EtudiantController.";
             }
@@ -58,6 +63,19 @@ switch ($controller) {
             } else {
                 echo "Action '$action' non trouvée dans EtudiantController.";
             }
+        }
+        break;
+
+    case 'encadreur':
+        // Middleware pour vérifier que l'utilisateur est un encadreur
+        requireRole('encadreur');
+
+        require_once 'controllers/EncadreurController.php';
+        $encadreur = new EncadreurController();
+        if (method_exists($encadreur, $action)) {
+            $encadreur->$action();
+        } else {
+            echo "Action '$action' non trouvée dans EncadreurController.";
         }
         break;
 
