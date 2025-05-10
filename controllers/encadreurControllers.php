@@ -4,8 +4,8 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 require_once 'config/database.php';
-require_once 'models/Encadreur.php';
-require_once 'models/Etudiants.php';
+require_once 'models/encadreur.php';
+require_once 'models/etudiants.php';
 
 class EncadreurController {
     /**
