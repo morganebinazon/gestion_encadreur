@@ -20,7 +20,7 @@
     <thead class="table-dark">
       <tr>
         <th>Nom</th>
-        <th>Prénom</th>
+        <th>Prenom</th>
         <th>Compétences</th>
         <th>Actions</th>
       </tr>

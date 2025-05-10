@@ -1,4 +1,7 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 require_once 'models/Encadreur.php';
 require_once 'models/Etudiants.php';
 
