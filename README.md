@@ -12,7 +12,6 @@ Une application PHP pour gérer l'affectation d'encadreurs aux étudiants dans u
 - [Modifications majeures](#modifications-majeures)
 - [Utilisation](#utilisation)
 - [Base de données](#base-de-données)
-- [Améliorations futures possibles](#améliorations-futures-possibles)
 
 ## Présentation
 
@@ -40,7 +39,7 @@ Cette application de gestion d'encadreurs est conçue pour faciliter l'affectati
 
 1. Clonez ce dépôt sur votre serveur local ou distant
 ```bash
-git clone https://github.com/votre-username/gestion_encadreur.git
+git clone https://github.com/morganebinazon/gestion_encadreur.git
 ```
 
 2. Importez la base de données en utilisant le fichier SQL fourni
@@ -210,12 +209,3 @@ CREATE TABLE relances (
   FOREIGN KEY (etudiant_id) REFERENCES etudiants(id)
 );
 ```
-
-## Améliorations futures possibles
-
-- Implémentation d'un système de messagerie interne entre étudiants et encadreurs
-- Ajout de notifications par email
-- Interface d'administration plus complète avec des filtres avancés
-- Exportation des données au format CSV/PDF
-- Système de suivi des projets avec jalons et évaluations
-- Interface responsive pour une meilleure expérience sur mobile
